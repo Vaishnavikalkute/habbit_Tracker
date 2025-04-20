@@ -1,13 +1,14 @@
 import './App.css';
-
+import { BrowserRouter as Router } from 'react-router-dom';
 import HabitTracker from './components/habbit';
 
 function App() {
   return (
-    <div className="App">
+    <Router basename="/habits">
       <HabitTracker/>
+    </Router>
       
-    </div>
+
   );
 }
 
