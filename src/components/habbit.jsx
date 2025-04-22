@@ -33,39 +33,45 @@ const HabitTracker = () => {
   };
 
   return (
-    <div className="p-4">
-      <h2 className="text-2xl font-bold mb-4">
+    <div className="p-4 max-w-6xl mx-auto">
+      <h2 className="text-3xl font-bold mb-6 text-center">
         Habit Tracker - {today.toLocaleString('default', { month: 'long' })} {year}
       </h2>
-      <table className="table-auto border w-full">
-        <thead>
-          <tr>
-            <th className="border px-2 py-1">Date</th>
-            {habits.map(habit => (
-              <th key={habit} className="border px-2 py-1">{habit}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {days.map(day => {
-            const dateKey = `${year}-${month + 1}-${day}`;
-            return (
-              <tr key={day} className={day === today.getDate() ? 'bg-yellow-100' : ''}>
-                <td className="border px-2 py-1">{day}</td>
-                {habits.map(habit => (
-                  <td key={habit} className="border px-2 py-1 text-center">
-                    <input
-                      type="checkbox"
-                      checked={habitData[dateKey]?.[habit] || false}
-                      onChange={() => toggleHabit(day, habit)}
-                    />
-                  </td>
-                ))}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+        {days.map(day => {
+          const dateKey = `${year}-${month + 1}-${day}`;
+          const isToday = day === today.getDate();
+          return (
+            <div
+              key={day}
+              className={`rounded-xl shadow p-4 transition duration-200 ${
+                isToday ? 'bg-yellow-100 border-2 border-yellow-500' : 'bg-white border'
+              }`}
+            >
+              <h3 className="text-lg font-semibold mb-2 text-center">Day {day}</h3>
+              <div className="space-y-2">
+                {habits.map(habit => {
+                  const completed = habitData[dateKey]?.[habit] || false;
+                  return (
+                    <div
+                      key={habit}
+                      className="flex items-center justify-between px-3 py-1 bg-gray-100 rounded"
+                    >
+                      <span className="text-sm">{habit}</span>
+                      <button
+                        onClick={() => toggleHabit(day, habit)}
+                        className={`w-5 h-5 rounded-full border ${
+                          completed ? 'bg-green-500 border-green-600' : 'bg-gray-300'
+                        }`}
+                      ></button>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };
