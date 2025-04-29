@@ -1,6 +1,10 @@
 // components/HabitTracker.jsx
 import React, { useState, useEffect } from 'react';
 
+import { db } from "../firebase";
+import { doc, setDoc, getDoc } from "firebase/firestore";
+
+
 const habits = ['Workout', 'Read', 'Code', 'Meditate'];
 
 const getDaysInMonth = (year, month) => {
@@ -19,8 +23,16 @@ const HabitTracker = () => {
   });
 
   useEffect(() => {
-    localStorage.setItem('habitData', JSON.stringify(habitData));
-  }, [habitData]);
+    const fetchData = async () => {
+      const docRef = doc(db, "habitData", "user1");
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setHabitData(docSnap.data());
+      }
+    };
+    fetchData();
+  }, []);
+  
 
   const toggleHabit = (day, habit) => {
     const key = `${year}-${month + 1}-${day}`;
